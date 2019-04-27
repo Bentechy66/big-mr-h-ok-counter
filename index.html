@@ -1,0 +1,78 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Mr H "ok" counter</title>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: lightblue;
+}
+
+button {
+  font-size: 2vh;
+}
+
+#ok {
+  font-size: 4vh;
+}
+</style>
+<script>
+// Functions for cookie management
+// Thanks to w3schools for this code!
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+// Controller for the counters - handles everything
+// For now only supports one counter / cookie on the entire page but whatever who cares am I right
+function getCounter(name) {
+  return getCookie(name) || 0;
+}
+
+function setCounter(name, amount) {
+  setCookie(name, amount, 30);
+  updateCounter();
+}
+function incrementCounter(name, amount) {
+  setCounter(name, amount + parseInt(getCounter(name)));
+  updateCounter();
+}
+
+function updateCounter() {
+  document.getElementById("ok_counter").innerHTML = getCounter("ok");
+}
+</script>
+</head>
+<body onload="updateCounter();">
+<center>
+<br/><br/>
+<h1>Big Mr H's OK Counter</h1>
+<p id="ok_counter">Current OK count: 0</p>
+<button id="ok" onclick="incrementCounter('ok', 1)">OK</button><br/>
+<button onclick="setCounter('ok', 0)">Reset</button>
+</center>
+</body>
+</html>
